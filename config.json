@@ -6,12 +6,12 @@
   "useRxJava2": "false",
   "developerName": "xiejiangchu",
   "developerEmail": "xiejiangchu@163.com",
-  "developerOrganization": "ebscn.com",
-  "developerOrganizationUrl": "http://www.ebscn.com",
-  "invokerPackage": "com.ebscn.app",
-  "modelPackage": "com.ebscn.app.data.entity",
-  "apiPackage": "com.ebscn.app.data.api",
-  "groupId": "com.ebscn.server",
+  "developerOrganization": "xie.com",
+  "developerOrganizationUrl": "http://www.xie.com",
+  "invokerPackage": "com.xie.app",
+  "modelPackage": "com.xie.app.data.entity",
+  "apiPackage": "com.xie.app.data.api",
+  "groupId": "com.xie.server",
   "artifactId": "retrofit2",
   "dateLibrary": "legacy"
 }
