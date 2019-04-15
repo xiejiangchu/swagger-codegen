@@ -1,0 +1,1 @@
+java -jar ./swagger-codegen-cli.jar generate -i http://10.84.155.184/v2/api-docs -o client -l java -c config.json

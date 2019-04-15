@@ -1,0 +1,17 @@
+{
+  "library": "retrofit2",
+  "sortParamsByRequiredFlag": "true",
+  "java8": "true",
+  "useRxJava": "false",
+  "useRxJava2": "false",
+  "developerName": "xiejiangchu",
+  "developerEmail": "xiejiangchu@163.com",
+  "developerOrganization": "ebscn.com",
+  "developerOrganizationUrl": "http://www.ebscn.com",
+  "invokerPackage": "com.ebscn.app",
+  "modelPackage": "com.ebscn.app.data.entity",
+  "apiPackage": "com.ebscn.app.data.api",
+  "groupId": "com.ebscn.server",
+  "artifactId": "retrofit2",
+  "dateLibrary": "legacy"
+}
