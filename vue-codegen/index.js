@@ -3,11 +3,11 @@ const codegen = require('./lib/codegen.js')
 const fs = require('fs')
 const path = require('path')
 const request = require('request');
-const mdGen = require('./md/index.js')
-const ymlGen = require('./yml/index.js')
+// const mdGen = require('./md/index.js')
+// const ymlGen = require('./yml/index.js')
 
 
-var url = 'http://10.84.155.184/v2/api-docs';
+var url = 'http://127.0.0.1/v2/api-docs';
 var name = 'api';
 
 request(url, function(error, response, body) {
@@ -20,8 +20,8 @@ request(url, function(error, response, body) {
         }
         let data = parse(opt);
         genJs(data);
-        genMd(data);
-        genYml(data);
+        // genMd(data);
+        // genYml(data);
     }
 });
 
@@ -37,6 +37,6 @@ function genMd(data) {
 }
 
 function genYml(data) {
-    let ymlData = mdGen(data)
+    let ymlData = ymlGen(data)
     fs.writeFileSync(path.join(__dirname, `./${name}.yml`), ymlData)
 }
