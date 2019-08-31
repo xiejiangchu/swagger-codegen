@@ -1,0 +1,63 @@
+/* eslint-disable */ 
+import * as {{moduleName}} from './api'
+
+//相关内容可参考 https://segmentfault.com/a/1190000015782272
+
+const state = {
+{{#methods}}
+    {{ shortPath}}Bean:{},//{{summary}}
+{{/methods}}
+}
+
+
+
+/**
+* getters
+*/
+const getters = {
+{{#methods}}
+   get{{upperCaseFirst shortPath}}Bean(state, getters, rootState) => {
+    return state.{{shortPath}}Bean
+  },
+{{/methods}}
+}
+
+
+
+
+/**
+* actions 异步方法
+*/
+const actions = {
+{{#methods}}
+	/**
+	* {{summary}}
+	*/
+    request{{upperCaseFirst shortPath}}({ dispatch, commit, state }, request){
+    {{moduleName}}.{{methodName}}().then((response) => {
+      commit('set{{upperCaseFirst shortPath}}Bean', { 'data': response.data })
+	})
+   },
+{{/methods}}
+}
+
+
+
+/**
+* mutations 同步操作
+*/
+const mutations = {
+{{#methods}}
+  set{{upperCaseFirst shortPath}}Bean(state, { data }) {
+    state.{{shortPath}}Bean = data
+  },
+{{/methods}}
+}  
+
+export default {
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations
+}

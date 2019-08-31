@@ -1,417 +1,556 @@
 /* eslint-disable */
-import axios from 'axios'
-import qs from 'qs'
-let domain = ''
-let axiosInstance = axios.create()
-export const getDomain = () => {
-  return domain
-}
-export const setDomain = ($domain) => {
-  domain = $domain
-}
-export const getAxiosInstance = () => {
-  return axiosInstance
-}
-export const setAxiosInstance = ($axiosInstance) => {
-  axiosInstance = $axiosInstance
-}
-export const request = (method, url, body, queryParameters, form, config) => {
-  method = method.toLowerCase()
-  let keys = Object.keys(queryParameters)
-  let queryUrl = url
-  if (keys.length > 0) {
-    queryUrl = url + '?' + qs.stringify(queryParameters)
-  }
-  // let queryUrl = url+(keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
-  if (body) {
-    return axiosInstance[method](queryUrl, body, config)
-  } else if (method === 'get' || method === 'delete' || method === 'head' || method === 'option') {
-    return axiosInstance[method](queryUrl, config)
-  } else {
-    return axiosInstance[method](queryUrl, qs.stringify(form), config)
-  }
-}
-/*==========================================================
- *                    比分实时在线
- ==========================================================*/
-/**
- * 获取即时比赛详细信息
- * request: detailUsingGET
- * url: detailUsingGETURL
- * method: detailUsingGET_TYPE
- * raw_url: detailUsingGET_RAW_URL
- * @param serverSteamId - serverSteamId
- */
-export const detailUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/detail'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters['serverSteamId'] !== undefined) {
-    queryParameters['serverSteamId'] = parameters['serverSteamId']
-  }
-  if (parameters['serverSteamId'] === undefined) {
-    return Promise.reject(new Error('Missing required  parameter: serverSteamId'))
-  }
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const detailUsingGET_RAW_URL = function() {
-  return '/api/detail'
-}
-export const detailUsingGET_TYPE = function() {
-  return 'get'
-}
-export const detailUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/detail'
-  if (parameters['serverSteamId'] !== undefined) {
-    queryParameters['serverSteamId'] = parameters['serverSteamId']
-  }
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+import * as api from './api'
+//相关内容可参考 https://segmentfault.com/a/1190000015782272
+const state = {
+  bondBean: {}, //获取所有的可转债
+  detailBean: {}, //获取即时比赛详细信息
+  heroBean: {}, //获取英雄的简要信息
+  heroDetailBean: {}, //获取英雄的网页介紹信息
+  heroStatsBean: {}, //获取英雄的详细信息
+  heroStatsSimpleBean: {}, //获取英雄的简要信息
+  itemsBean: {}, //获取所有的装备列表
+  jgdyBean: {}, //获取机构调研数据
+  loftABean: {}, //获取所有的分级A基金
+  loftBBean: {}, //获取所有的分级B基金
+  mapBean: {}, //map
+  matchesBean: {}, //根据match_id来获取历史比赛列表
+  otherBean: {}, //获取所有的混合型基金
+  publicMatchBean: {}, //根据match_id来获取公众历史比赛列表
+  queryBean: {}, //query
+  saveBean: {}, //save
+  stockDetailBean: {}, //从sina获取
+  stockFundBean: {}, //获取所有的股票型基金
+  stockFxBean: {}, //昨天涨停，今天长上影线
+  stockJhBean: {}, //前日涨停，昨天长上影线，今日暴跌
+  stockVolHalfBean: {}, //今日量能是昨天的一半
+  teamBean: {}, //获取队伍的详细信息
+  topLiveBean: {}, //获取即时比赛列表
 }
 /**
- * 获取英雄的简要信息
- * request: heroUsingGET
- * url: heroUsingGETURL
- * method: heroUsingGET_TYPE
- * raw_url: heroUsingGET_RAW_URL
+ * getters
  */
-export const heroUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/hero'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const heroUsingGET_RAW_URL = function() {
-  return '/api/hero'
-}
-export const heroUsingGET_TYPE = function() {
-  return 'get'
-}
-export const heroUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/hero'
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+const getters = {
+  getBondBean(state, getters, rootState) => {
+    return state.bondBean
+  },
+  getDetailBean(state, getters, rootState) => {
+    return state.detailBean
+  },
+  getHeroBean(state, getters, rootState) => {
+    return state.heroBean
+  },
+  getHerodetailBean(state, getters, rootState) => {
+    return state.heroDetailBean
+  },
+  getHerostatsBean(state, getters, rootState) => {
+    return state.heroStatsBean
+  },
+  getHerostatssimpleBean(state, getters, rootState) => {
+    return state.heroStatsSimpleBean
+  },
+  getItemsBean(state, getters, rootState) => {
+    return state.itemsBean
+  },
+  getJgdyBean(state, getters, rootState) => {
+    return state.jgdyBean
+  },
+  getLoftaBean(state, getters, rootState) => {
+    return state.loftABean
+  },
+  getLoftbBean(state, getters, rootState) => {
+    return state.loftBBean
+  },
+  getMapBean(state, getters, rootState) => {
+    return state.mapBean
+  },
+  getMatchesBean(state, getters, rootState) => {
+    return state.matchesBean
+  },
+  getOtherBean(state, getters, rootState) => {
+    return state.otherBean
+  },
+  getPublicmatchBean(state, getters, rootState) => {
+    return state.publicMatchBean
+  },
+  getQueryBean(state, getters, rootState) => {
+    return state.queryBean
+  },
+  getSaveBean(state, getters, rootState) => {
+    return state.saveBean
+  },
+  getStockdetailBean(state, getters, rootState) => {
+    return state.stockDetailBean
+  },
+  getStockfundBean(state, getters, rootState) => {
+    return state.stockFundBean
+  },
+  getStockfxBean(state, getters, rootState) => {
+    return state.stockFxBean
+  },
+  getStockjhBean(state, getters, rootState) => {
+    return state.stockJhBean
+  },
+  getStockvolhalfBean(state, getters, rootState) => {
+    return state.stockVolHalfBean
+  },
+  getTeamBean(state, getters, rootState) => {
+    return state.teamBean
+  },
+  getTopliveBean(state, getters, rootState) => {
+    return state.topLiveBean
+  },
 }
 /**
- * 获取英雄的详细信息
- * request: heroStatsUsingGET
- * url: heroStatsUsingGETURL
- * method: heroStatsUsingGET_TYPE
- * raw_url: heroStatsUsingGET_RAW_URL
+ * actions 异步方法
  */
-export const heroStatsUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/heroStats'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const heroStatsUsingGET_RAW_URL = function() {
-  return '/api/heroStats'
-}
-export const heroStatsUsingGET_TYPE = function() {
-  return 'get'
-}
-export const heroStatsUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/heroStats'
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
+const actions = {
+  /**
+   * 获取所有的可转债
+   */
+  requestBond({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .bondUsingGET().then((response) => {
+      commit('setBondBean', {
+        'data': response.data
+      })
     })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+  },
+  /**
+   * 获取即时比赛详细信息
+   */
+  requestDetail({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .detailUsingGET().then((response) => {
+      commit('setDetailBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取英雄的简要信息
+   */
+  requestHero({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .heroUsingGET().then((response) => {
+      commit('setHeroBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取英雄的网页介紹信息
+   */
+  requestHerodetail({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .heroDetailUsingGET().then((response) => {
+      commit('setHerodetailBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取英雄的详细信息
+   */
+  requestHerostats({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .heroStatsUsingGET().then((response) => {
+      commit('setHerostatsBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取英雄的简要信息
+   */
+  requestHerostatssimple({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .heroStatsSimpleUsingGET().then((response) => {
+      commit('setHerostatssimpleBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取所有的装备列表
+   */
+  requestItems({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .itemsUsingGET().then((response) => {
+      commit('setItemsBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取机构调研数据
+   */
+  requestJgdy({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .jgdyUsingGET().then((response) => {
+      commit('setJgdyBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取所有的分级A基金
+   */
+  requestLofta({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .loftAUsingGET().then((response) => {
+      commit('setLoftaBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取所有的分级B基金
+   */
+  requestLoftb({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .loftBUsingGET().then((response) => {
+      commit('setLoftbBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * map
+   */
+  requestMap({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .mapUsingGET().then((response) => {
+      commit('setMapBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 根据match_id来获取历史比赛列表
+   */
+  requestMatches({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .matchesUsingGET().then((response) => {
+      commit('setMatchesBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取所有的混合型基金
+   */
+  requestOther({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .otherFundUsingGET().then((response) => {
+      commit('setOtherBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 根据match_id来获取公众历史比赛列表
+   */
+  requestPublicmatch({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .publicMatchUsingGET().then((response) => {
+      commit('setPublicmatchBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * query
+   */
+  requestQuery({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .queryUsingGET().then((response) => {
+      commit('setQueryBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * save
+   */
+  requestSave({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .saveUsingPOST().then((response) => {
+      commit('setSaveBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 从sina获取
+   */
+  requestStockdetail({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .stockDetailUsingGET().then((response) => {
+      commit('setStockdetailBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取所有的股票型基金
+   */
+  requestStockfund({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .stockFundUsingGET().then((response) => {
+      commit('setStockfundBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 昨天涨停，今天长上影线
+   */
+  requestStockfx({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .stockFxUsingGET().then((response) => {
+      commit('setStockfxBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 前日涨停，昨天长上影线，今日暴跌
+   */
+  requestStockjh({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .stockJhUsingGET().then((response) => {
+      commit('setStockjhBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 今日量能是昨天的一半
+   */
+  requestStockvolhalf({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .stockVolHalfUsingGET().then((response) => {
+      commit('setStockvolhalfBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取队伍的详细信息
+   */
+  requestTeam({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .teamUsingGET().then((response) => {
+      commit('setTeamBean', {
+        'data': response.data
+      })
+    })
+  },
+  /**
+   * 获取即时比赛列表
+   */
+  requestToplive({
+    dispatch,
+    commit,
+    state
+  }, request) {
+    .topLiveUsingGET().then((response) => {
+      commit('setTopliveBean', {
+        'data': response.data
+      })
+    })
+  },
 }
 /**
- * 根据match_id来获取历史比赛列表
- * request: matchesUsingGET
- * url: matchesUsingGETURL
- * method: matchesUsingGET_TYPE
- * raw_url: matchesUsingGET_RAW_URL
- * @param lessThanMatchId - less_than_match_id
+ * mutations 同步操作
  */
-export const matchesUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/matches'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters['lessThanMatchId'] !== undefined) {
-    queryParameters['less_than_match_id'] = parameters['lessThanMatchId']
-  }
-  if (parameters['lessThanMatchId'] === undefined) {
-    return Promise.reject(new Error('Missing required  parameter: lessThanMatchId'))
-  }
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
+const mutations = {
+  setBondBean(state, {
+    data
+  }) {
+    state.bondBean = data
+  },
+  setDetailBean(state, {
+    data
+  }) {
+    state.detailBean = data
+  },
+  setHeroBean(state, {
+    data
+  }) {
+    state.heroBean = data
+  },
+  setHerodetailBean(state, {
+    data
+  }) {
+    state.heroDetailBean = data
+  },
+  setHerostatsBean(state, {
+    data
+  }) {
+    state.heroStatsBean = data
+  },
+  setHerostatssimpleBean(state, {
+    data
+  }) {
+    state.heroStatsSimpleBean = data
+  },
+  setItemsBean(state, {
+    data
+  }) {
+    state.itemsBean = data
+  },
+  setJgdyBean(state, {
+    data
+  }) {
+    state.jgdyBean = data
+  },
+  setLoftaBean(state, {
+    data
+  }) {
+    state.loftABean = data
+  },
+  setLoftbBean(state, {
+    data
+  }) {
+    state.loftBBean = data
+  },
+  setMapBean(state, {
+    data
+  }) {
+    state.mapBean = data
+  },
+  setMatchesBean(state, {
+    data
+  }) {
+    state.matchesBean = data
+  },
+  setOtherBean(state, {
+    data
+  }) {
+    state.otherBean = data
+  },
+  setPublicmatchBean(state, {
+    data
+  }) {
+    state.publicMatchBean = data
+  },
+  setQueryBean(state, {
+    data
+  }) {
+    state.queryBean = data
+  },
+  setSaveBean(state, {
+    data
+  }) {
+    state.saveBean = data
+  },
+  setStockdetailBean(state, {
+    data
+  }) {
+    state.stockDetailBean = data
+  },
+  setStockfundBean(state, {
+    data
+  }) {
+    state.stockFundBean = data
+  },
+  setStockfxBean(state, {
+    data
+  }) {
+    state.stockFxBean = data
+  },
+  setStockjhBean(state, {
+    data
+  }) {
+    state.stockJhBean = data
+  },
+  setStockvolhalfBean(state, {
+    data
+  }) {
+    state.stockVolHalfBean = data
+  },
+  setTeamBean(state, {
+    data
+  }) {
+    state.teamBean = data
+  },
+  setTopliveBean(state, {
+    data
+  }) {
+    state.topLiveBean = data
+  },
 }
-export const matchesUsingGET_RAW_URL = function() {
-  return '/api/matches'
-}
-export const matchesUsingGET_TYPE = function() {
-  return 'get'
-}
-export const matchesUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/matches'
-  if (parameters['lessThanMatchId'] !== undefined) {
-    queryParameters['less_than_match_id'] = parameters['lessThanMatchId']
-  }
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
-}
-/**
- * 根据match_id来获取公众历史比赛列表
- * request: publicMatchUsingGET
- * url: publicMatchUsingGETURL
- * method: publicMatchUsingGET_TYPE
- * raw_url: publicMatchUsingGET_RAW_URL
- * @param lessThanMatchId - less_than_match_id
- */
-export const publicMatchUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/publicMatch'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters['lessThanMatchId'] !== undefined) {
-    queryParameters['less_than_match_id'] = parameters['lessThanMatchId']
-  }
-  if (parameters['lessThanMatchId'] === undefined) {
-    return Promise.reject(new Error('Missing required  parameter: lessThanMatchId'))
-  }
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const publicMatchUsingGET_RAW_URL = function() {
-  return '/api/publicMatch'
-}
-export const publicMatchUsingGET_TYPE = function() {
-  return 'get'
-}
-export const publicMatchUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/publicMatch'
-  if (parameters['lessThanMatchId'] !== undefined) {
-    queryParameters['less_than_match_id'] = parameters['lessThanMatchId']
-  }
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
-}
-/**
- * 昨天涨停，今天长上影线
- * request: stockFxUsingGET
- * url: stockFxUsingGETURL
- * method: stockFxUsingGET_TYPE
- * raw_url: stockFxUsingGET_RAW_URL
- */
-export const stockFxUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/stockFx'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const stockFxUsingGET_RAW_URL = function() {
-  return '/api/stockFx'
-}
-export const stockFxUsingGET_TYPE = function() {
-  return 'get'
-}
-export const stockFxUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/stockFx'
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
-}
-/**
- * 前日涨停，昨天长上影线，今日暴跌
- * request: stockJhUsingGET
- * url: stockJhUsingGETURL
- * method: stockJhUsingGET_TYPE
- * raw_url: stockJhUsingGET_RAW_URL
- */
-export const stockJhUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/stockJh'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const stockJhUsingGET_RAW_URL = function() {
-  return '/api/stockJh'
-}
-export const stockJhUsingGET_TYPE = function() {
-  return 'get'
-}
-export const stockJhUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/stockJh'
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
-}
-/**
- * 获取队伍的详细信息
- * request: teamUsingGET
- * url: teamUsingGETURL
- * method: teamUsingGET_TYPE
- * raw_url: teamUsingGET_RAW_URL
- */
-export const teamUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/team'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const teamUsingGET_RAW_URL = function() {
-  return '/api/team'
-}
-export const teamUsingGET_TYPE = function() {
-  return 'get'
-}
-export const teamUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/team'
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
-}
-/**
- * 获取即时比赛列表
- * request: topLiveUsingGET
- * url: topLiveUsingGETURL
- * method: topLiveUsingGET_TYPE
- * raw_url: topLiveUsingGET_RAW_URL
- */
-export const topLiveUsingGET = function(parameters = {}) {
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  const config = parameters.$config
-  let path = '/api/topLive'
-  let body
-  let queryParameters = {}
-  let form = {}
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    });
-  }
-  return request('get', domain + path, body, queryParameters, form, config)
-}
-export const topLiveUsingGET_RAW_URL = function() {
-  return '/api/topLive'
-}
-export const topLiveUsingGET_TYPE = function() {
-  return 'get'
-}
-export const topLiveUsingGETURL = function(parameters = {}) {
-  let queryParameters = {}
-  const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/api/topLive'
-  if (parameters.$queryParameters) {
-    Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-      queryParameters[parameterName] = parameters.$queryParameters[parameterName]
-    })
-  }
-  let keys = Object.keys(queryParameters)
-  return domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '')
+export default {
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations
 }

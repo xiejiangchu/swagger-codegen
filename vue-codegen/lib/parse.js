@@ -56,6 +56,7 @@ let getViewForSwagger2 = function (opts) {
       }
       let method = {
         path: path,
+        shortPath: path.substr(path.lastIndexOf('/')+1),
         className: opts.className,
         methodName: op.operationId ? normalizeName(op.operationId) : getPathToMethodName(opts, m, path),
         method: m.toUpperCase(),
@@ -153,6 +154,7 @@ let getViewForSwagger1 = function (opts) {
     api.operations.forEach(function (op) {
       let method = {
         path: api.path,
+        shortPath: api.path.substr(api.path.lastIndexOf('/')+1),
         className: opts.className,
         methodName: op.nickname,
         method: op.method,

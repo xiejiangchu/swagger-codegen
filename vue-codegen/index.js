@@ -7,18 +7,19 @@ const request = require('request');
 // const ymlGen = require('./yml/index.js')
 
 
-var url = 'http://127.0.0.1/v2/api-docs';
+var url = 'http://119.27.160.36/v2/api-docs';
 var name = 'api';
 
 request(url, function(error, response, body) {
     if (!error && response.statusCode == 200) {
-        // console.log(body) // 请求成功的处理逻辑
+        fs.writeFileSync(path.join(__dirname, `./${name}.json`), body)
         let opt = {
             swagger: JSON.parse(body),
             moduleName: name,
             className: name
         }
         let data = parse(opt);
+        // console.log(JSON.stringify(data));
         genJs(data);
         // genMd(data);
         // genYml(data);
@@ -27,7 +28,8 @@ request(url, function(error, response, body) {
 
 function genJs(data) {
     let codeResult = codegen(data);
-    fs.writeFileSync(path.join(__dirname, `/${name}.js`), codeResult)
+    fs.writeFileSync(path.join(__dirname, `/${name}Request.js`), codeResult.api);
+    fs.writeFileSync(path.join(__dirname, `/${name}.js`), codeResult.store);
 }
 
 
