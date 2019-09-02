@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="{{package}}.mapper.{{camelCase tableInfo.tableName}}Mapper">
+    <resultMap id="BaseResultMap" type="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+        {{#cols}}
+        <result property="{{camelCaseLowerFirst columnName}}" column="{{columnName}}"/>
+		{{/cols}}
+    </resultMap>
+    <sql id="Base_Column_List">
+        <trim prefix="" suffix="" suffixOverrides=",">
+   	    {{#cols}}`{{columnName}}`,{{/cols}}
+         </trim>
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM {{tableInfo.tableName}}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM {{tableInfo.tableName}}
+        WHERE id IN
+        <foreach collection="list" separator="," item="id" open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </select>
+
+    <select id="count" resultType="integer">
+        SELECT COUNT(1)
+        FROM {{tableInfo.tableName}}
+    </select>
+
+    <insert id="insert" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+    	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+		INSERT INTO {{tableInfo.tableName}}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		{{#cols}}
+        `{{columnName}}`,
+		{{/cols}}
+		</trim>
+		VALUES(
+        <trim prefix="" suffix="" suffixOverrides=",">
+		{{#cols}}
+        #{{bracketsAndCamelCaseLowerFirst columnName}},
+		{{/cols}}
+        </trim>
+        )
+	</insert>
+
+	<insert id="insertSelective" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+    	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+		INSERT INTO {{tableInfo.tableName}}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		{{#cols}}
+		<if test="{{camelCaseLowerFirst columnName}} != null">
+        `{{columnName}}`,
+         </if>
+		{{/cols}}
+		</trim>
+        VALUES(
+        <trim prefix="" suffix="" suffixOverrides=",">
+		{{#cols}}
+		<if test="{{camelCaseLowerFirst columnName}} != null">
+        #{{bracketsAndCamelCaseLowerFirst columnName}},
+         </if>
+		{{/cols}}
+		</trim>
+        )
+	</insert>
+
+	<update id="update" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+		UPDATE {{tableInfo.tableName}} SET(
+        <trim prefix="" suffix="" suffixOverrides=",">
+		{{#cols}}
+        `{{columnName}}`,
+		{{/cols}}
+        </trim>
+	    )
+		VALUES(
+        <trim prefix="" suffix="" suffixOverrides=",">
+		{{#cols}}
+        #{{bracketsAndCamelCaseLowerFirst columnName}},
+		{{/cols}}
+        </trim>
+		)
+	</update>
+
+	<update id="updateByPrimaryKeySelective" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+        UPDATE {{tableInfo.tableName}}
+        <set>
+        	<trim prefix="" suffix="" suffixOverrides=",">
+        		{{#cols}}
+	            <if test="{{camelCaseLowerFirst columnName}} != null">
+		        `{{columnName}}` = #{{bracketsAndCamelCaseLowerFirst columnName}},
+		        </if>
+		        {{/cols}}
+            </trim>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+	 <update id="updateByPrimaryKey" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+     UPDATE {{tableInfo.tableName}} SET
+     <trim prefix="" suffix="" suffixOverrides=",">
+     {{#cols}}
+	 <if test="{{camelCaseLowerFirst columnName}} != null">
+       `{{columnName}}`=#{{bracketsAndCamelCaseLowerFirst columnName}},
+     </if>
+	{{/cols}}
+	</trim>
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    DELETE FROM {{tableInfo.tableName}}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteAll">
+    DELETE FROM {{tableInfo.tableName}}
+  </delete>
+</mapper>

@@ -1,0 +1,36 @@
+package {{package}}.bean;
+
+import java.io.Serializable;
+{{#cols}}
+import {{javaTypeLong dataType}};
+{{/cols}}
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel("{{tableInfo.comments}}")
+public class {{camelCase tableInfo.tableName}} implements Serializable {
+	{{#cols}}
+  	/**
+     *  {{comments}}
+     */
+    @ApiModelProperty("{{comments}}")
+    private {{javaTypeShort dataType}} {{camelCaseLowerFirst columnName}};
+	{{/cols}}
+
+
+	{{#cols}}
+	/**
+     *  获取{{comments}}
+     */
+    public {{javaTypeShort dataType}} get{{camelCase columnName}}(){
+		return this.{{camelCaseLowerFirst columnName}};
+	}
+
+	/**
+     * 设置{{comments}}
+     */
+	public void set{{camelCase columnName}}({{javaTypeShort dataType}} {{camelCaseLowerFirst columnName}}){
+		this.{{camelCaseLowerFirst columnName}} = {{camelCaseLowerFirst columnName}};
+	}
+	{{/cols}}
+}

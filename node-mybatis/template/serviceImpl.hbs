@@ -1,0 +1,70 @@
+package {{package}}.service.impl;
+
+import java.util.List;
+import {{package}}.bean.{{camelCase tableInfo.tableName}};
+import {{package}}.service.{{camelCase tableInfo.tableName}}Service;
+import {{package}}.mapper.{{camelCase tableInfo.tableName}}Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * Created by xie
+ */
+@Service
+public class {{camelCase tableInfo.tableName}}ServiceImpl implements {{camelCase tableInfo.tableName}}Service {
+
+	@Autowired
+    private {{camelCase tableInfo.tableName}}Mapper {{camelCaseLowerFirst tableInfo.tableName}}Mapper;
+
+	@Override
+	public {{camelCase tableInfo.tableName}} selectByPrimaryKey(Integer id){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public List<{{camelCase tableInfo.tableName}}> selectByPrimaryKeys(List<Integer> ids){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.selectByPrimaryKeys(ids);
+	}
+
+	@Override
+	public int count(){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.count();
+	}
+
+	@Override
+	public {{camelCase tableInfo.tableName}} insert({{camelCase tableInfo.tableName}} record){
+		{{camelCaseLowerFirst tableInfo.tableName}}Mapper.insert(record);
+		return record;
+	}
+
+	@Override	
+	public {{camelCase tableInfo.tableName}} insertSelective({{camelCase tableInfo.tableName}} record){
+		{{camelCaseLowerFirst tableInfo.tableName}}Mapper.insertSelective(record);
+		return record;
+	}
+
+	@Override
+	public int update({{camelCase tableInfo.tableName}} record){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.update(record);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective({{camelCase tableInfo.tableName}} record){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.updateByPrimaryKeySelective(record);
+	}
+
+	@Override
+	public int updateByPrimaryKey({{camelCase tableInfo.tableName}} record){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.updateByPrimaryKey(record);
+	}
+
+	@Override
+	public int deleteByPrimaryKey(Integer id){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public int deleteAll(){
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.deleteAll();
+	}
+}
