@@ -3,12 +3,13 @@ const codegen = require('./lib/codegen.js')
 const fs = require('fs')
 const path = require('path')
 const request = require('request');
+const _ = require('lodash')
 // const mdGen = require('./md/index.js')
 // const ymlGen = require('./yml/index.js')
 
 
-var url = 'http://119.27.160.36/v2/api-docs';
-var name = 'api';
+var url = 'http://127.0.0.1:8080/v2/api-docs';
+var name = 'shop';
 
 request(url, function(error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -19,7 +20,7 @@ request(url, function(error, response, body) {
             className: name
         }
         let data = parse(opt);
-        // console.log(JSON.stringify(data));
+        console.log(JSON.stringify(data));
         genJs(data);
         // genMd(data);
         // genYml(data);

@@ -5,7 +5,7 @@ import * as {{moduleName}} from './api'
 
 const state = {
 {{#methods}}
-    {{ shortPath}}Bean:{},//{{summary}}
+    {{methodName}}Req:{},//{{summary}}
 {{/methods}}
 }
 
@@ -16,8 +16,8 @@ const state = {
 */
 const getters = {
 {{#methods}}
-   get{{upperCaseFirst shortPath}}Bean(state, getters, rootState) => {
-    return state.{{shortPath}}Bean
+   get{{upperCaseFirst methodName}}Req(state, getters, rootState) => {
+    return state.{{methodName}}Req
   },
 {{/methods}}
 }
@@ -33,9 +33,9 @@ const actions = {
 	/**
 	* {{summary}}
 	*/
-    request{{upperCaseFirst shortPath}}({ dispatch, commit, state }, request){
-    {{moduleName}}.{{methodName}}().then((response) => {
-      commit('set{{upperCaseFirst shortPath}}Bean', { 'data': response.data })
+    request{{upperCaseFirst methodName}}({ dispatch, commit, state }, parameters){
+    {{moduleName}}.{{methodName}}(parameters).then((response) => {
+      commit('set{{upperCaseFirst methodName}}Req', { 'data': response.data })
 	})
    },
 {{/methods}}
@@ -48,8 +48,8 @@ const actions = {
 */
 const mutations = {
 {{#methods}}
-  set{{upperCaseFirst shortPath}}Bean(state, { data }) {
-    state.{{shortPath}}Bean = data
+  set{{upperCaseFirst methodName}}Req(state, { data }) {
+    state.{{methodName}}Req = data
   },
 {{/methods}}
 }  

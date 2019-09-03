@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * Created by xie
  */
+@Api(value = "/{{camelCaseLowerFirst tableInfo.tableName}}", description = "{{tableInfo.comments}}")
 @RestController
 @RequestMapping("/api/{{camelCaseLowerFirst tableInfo.tableName}}")
 public class {{camelCase tableInfo.tableName}}Controller {
@@ -29,7 +30,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 根据id获取{{tableInfo.comments}}信息详情
 	*/
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@ApiOperation(value = "根据id获取{{tableInfo.comments}}详情", response = {{camelCase tableInfo.tableName}}.class)
+	@ApiOperation(value = "根据id获取{{tableInfo.comments}}详情", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}Get", response = {{camelCase tableInfo.tableName}}.class, notes = "根据id获取{{tableInfo.comments}}详情")
 	BaseResponse<{{camelCase tableInfo.tableName}}> selectByPrimaryKeyFor{{camelCase tableInfo.tableName}}(@PathVariable("id") Integer id){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.selectByPrimaryKey(id));
 	}
@@ -38,7 +39,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 根据id批量获取{{tableInfo.comments}}信息详情
 	*/
 	@RequestMapping(value = "/selectByPrimaryKeys", method = RequestMethod.GET)
-	@ApiOperation(value = "根据id批量获取{{tableInfo.comments}}详情", response = {{camelCase tableInfo.tableName}}.class)
+	@ApiOperation(value = "根据id批量获取{{tableInfo.comments}}详情", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}List",response = {{camelCase tableInfo.tableName}}.class, notes = "根据id批量获取{{tableInfo.comments}}详情")
 	BaseResponse<List<{{camelCase tableInfo.tableName}}>> selectByPrimaryKeysFor{{camelCase tableInfo.tableName}}(@RequestParam("ids") List<Integer> ids){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.selectByPrimaryKeys(ids));
 	}
@@ -48,7 +49,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 获取{{tableInfo.comments}}总记录数
 	*/
 	@RequestMapping(value = "/count", method = RequestMethod.GET)
-	@ApiOperation(value = "获取{{tableInfo.comments}}总记录数", response = Integer.class)
+	@ApiOperation(value = "获取{{tableInfo.comments}}总记录数", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}Count",response = Integer.class, notes = "获取{{tableInfo.comments}}总记录数")
 	BaseResponse countFor{{camelCase tableInfo.tableName}}(){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.count());
 	}
@@ -57,7 +58,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 插入{{tableInfo.comments}}记录
 	*/
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	@ApiOperation(value = "插入{{tableInfo.comments}}记录", response = Integer.class)
+	@ApiOperation(value = "插入{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}Post",response = Integer.class, notes = "插入{{tableInfo.comments}}记录")
 	BaseResponse<{{camelCase tableInfo.tableName}}> insertFor{{camelCase tableInfo.tableName}}({{camelCase tableInfo.tableName}} record){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.insert(record));
 	}
@@ -66,7 +67,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 根据部分字段插入{{tableInfo.comments}}记录
 	*/
 	@RequestMapping(value = "/insertSelective", method = RequestMethod.POST)
-	@ApiOperation(value = "根据部分字段插入{{tableInfo.comments}}记录", response = Integer.class)
+	@ApiOperation(value = "根据部分字段插入{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}PostPart",response = Integer.class, notes = "根据部分字段插入{{tableInfo.comments}}记录")
 	BaseResponse<{{camelCase tableInfo.tableName}}> insertSelectiveFor{{camelCase tableInfo.tableName}}({{camelCase tableInfo.tableName}} record){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.insertSelective(record));
 	}
@@ -75,7 +76,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 更新{{tableInfo.comments}}记录
 	*/
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
-	@ApiOperation(value = "更新{{tableInfo.comments}}记录", response = Integer.class)
+	@ApiOperation(value = "更新{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}Put",response = Integer.class, notes = "更新{{tableInfo.comments}}记录")
 	BaseResponse updateFor{{camelCase tableInfo.tableName}}({{camelCase tableInfo.tableName}} record){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.update(record));
 	}
@@ -84,7 +85,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 根据部分字段更新{{tableInfo.comments}}记录
 	*/
 	@RequestMapping(value = "/updateByPrimaryKeySelective", method = RequestMethod.PUT)
-	@ApiOperation(value = "根据部分字段更新{{tableInfo.comments}}记录", response = Integer.class)
+	@ApiOperation(value = "根据部分字段更新{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}PutPart",response = Integer.class, notes = "根据部分字段更新{{tableInfo.comments}}记录")
 	BaseResponse updateByPrimaryKeySelectiveFor{{camelCase tableInfo.tableName}}({{camelCase tableInfo.tableName}} record){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.updateByPrimaryKeySelective(record));
 	}
@@ -92,8 +93,8 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	/**
 	* 根据主键更新{{tableInfo.comments}}记录
 	*/
-	@RequestMapping(value = "/updateByPrimaryKey", method = RequestMethod.GET)
-	@ApiOperation(value = "根据主键更新{{tableInfo.comments}}记录", response = Integer.class)
+	@RequestMapping(value = "/updateByPrimaryKey", method = RequestMethod.PUT)
+	@ApiOperation(value = "根据主键更新{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}PutById",response = Integer.class, notes = "根据主键更新{{tableInfo.comments}}记录")
 	BaseResponse updateByPrimaryKeyFor{{camelCase tableInfo.tableName}}({{camelCase tableInfo.tableName}} record){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.updateByPrimaryKey(record));
 	}
@@ -102,7 +103,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 根据主键删除{{tableInfo.comments}}记录
 	*/
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	@ApiOperation(value = "根据主键删除{{tableInfo.comments}}记录", response = Integer.class)
+	@ApiOperation(value = "根据主键删除{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}Delete",response = Integer.class, notes = "根据主键删除{{tableInfo.comments}}记录")
 	BaseResponse deleteByPrimaryKeyFor{{camelCase tableInfo.tableName}}(@PathVariable("id") Integer id){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.deleteByPrimaryKey(id));
 	}
@@ -111,7 +112,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 	* 删除所有{{tableInfo.comments}}记录
 	*/
 	@RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
-	@ApiOperation(value = "删除所有{{tableInfo.comments}}记录", response = Integer.class)
+	@ApiOperation(value = "删除所有{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}DeleteAll", response = Integer.class, notes = "删除所有{{tableInfo.comments}}记录")
 	BaseResponse deleteAllFor{{camelCase tableInfo.tableName}}(){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.deleteAll());
 	}

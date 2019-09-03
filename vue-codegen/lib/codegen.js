@@ -2,6 +2,7 @@ const Handlebars = require('handlebars')
 const fs = require('fs')
 const path = require('path')
 const beautify = require('js-beautify').js_beautify
+const _ = require('lodash')
 const apiTemplate = fs.readFileSync(path.join(__dirname, './template/api.hbs'), 'utf-8')
 const apiStoreTemplate = fs.readFileSync(path.join(__dirname, './template/apiStore.hbs'), 'utf-8')
 const methods = fs.readFileSync(path.join(__dirname, './template/methods.hbs'), 'utf-8')
@@ -13,9 +14,25 @@ Handlebars.registerHelper('toLowerCase', function(word) {
 })
 Handlebars.registerHelper('upperCaseFirst', function(str) {
     var str = str.toLowerCase();
-    str = str.replace(/\b\w+\b/g, function(word) {
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
-    });
+    return _.upperFirst(str);
+})
+Handlebars.registerHelper('toLowerCase', function(str) {
+    return _.toLower(str);
+})
+Handlebars.registerHelper('toUpperCase', function(str) {
+    return _.toUpper(str);
+})
+Handlebars.registerHelper('camelCase', function(str) {
+    str = str.toLowerCase();
+    str = _.capitalize(str)
+    str = _.camelCase(str);
+    str = _.upperFirst(str);
+    return str;
+})
+Handlebars.registerHelper('camelCaseLowerFirst', function(str) {
+    str = str.toLowerCase();
+    str = _.capitalize(str)
+    str = _.camelCase(str);
     return str;
 })
 Handlebars.registerHelper('brackets', function(word) {
