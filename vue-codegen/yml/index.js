@@ -10,6 +10,6 @@ Handlebars.registerPartial('method', method)
 
 module.exports = function(data) {
     let codeResult = codegen(data)
-    let yml = Handlebars.compile(mdTemplate)(data)
+    let yml = Handlebars.compile(apiTemplate)(data)
     return yml;
 }

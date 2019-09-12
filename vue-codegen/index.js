@@ -20,7 +20,7 @@ request(url, function(error, response, body) {
             className: name
         }
         let data = parse(opt);
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
         genJs(data);
         // genMd(data);
         // genYml(data);

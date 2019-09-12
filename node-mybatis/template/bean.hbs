@@ -7,13 +7,13 @@ import {{javaTypeLong dataType}};
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel("{{tableInfo.comments}}")
+@ApiModel(description="{{tableInfo.comments}}")
 public class {{camelCase tableInfo.tableName}} implements Serializable {
 	{{#cols}}
   	/**
      *  {{comments}}
      */
-    @ApiModelProperty("{{comments}}")
+    @ApiModelProperty(value="{{comments}}", name="{{camelCaseLowerFirst columnName}}", notes="{{comments}}")
     private {{javaTypeShort dataType}} {{camelCaseLowerFirst columnName}};
 	{{/cols}}
 

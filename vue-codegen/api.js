@@ -111,8 +111,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .bondUsingGET().then((response) => {
+  }, parameters) {
+    .bondUsingGET(parameters).then((response) => {
       commit('setBondBean', {
         'data': response.data
       })
@@ -125,8 +125,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .detailUsingGET().then((response) => {
+  }, parameters) {
+    .detailUsingGET(parameters).then((response) => {
       commit('setDetailBean', {
         'data': response.data
       })
@@ -139,8 +139,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .heroUsingGET().then((response) => {
+  }, parameters) {
+    .heroUsingGET(parameters).then((response) => {
       commit('setHeroBean', {
         'data': response.data
       })
@@ -153,8 +153,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .heroDetailUsingGET().then((response) => {
+  }, parameters) {
+    .heroDetailUsingGET(parameters).then((response) => {
       commit('setHerodetailBean', {
         'data': response.data
       })
@@ -167,8 +167,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .heroStatsUsingGET().then((response) => {
+  }, parameters) {
+    .heroStatsUsingGET(parameters).then((response) => {
       commit('setHerostatsBean', {
         'data': response.data
       })
@@ -181,8 +181,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .heroStatsSimpleUsingGET().then((response) => {
+  }, parameters) {
+    .heroStatsSimpleUsingGET(parameters).then((response) => {
       commit('setHerostatssimpleBean', {
         'data': response.data
       })
@@ -195,8 +195,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .itemsUsingGET().then((response) => {
+  }, parameters) {
+    .itemsUsingGET(parameters).then((response) => {
       commit('setItemsBean', {
         'data': response.data
       })
@@ -209,8 +209,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .jgdyUsingGET().then((response) => {
+  }, parameters) {
+    .jgdyUsingGET(parameters).then((response) => {
       commit('setJgdyBean', {
         'data': response.data
       })
@@ -223,8 +223,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .loftAUsingGET().then((response) => {
+  }, parameters) {
+    .loftAUsingGET(parameters).then((response) => {
       commit('setLoftaBean', {
         'data': response.data
       })
@@ -237,8 +237,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .loftBUsingGET().then((response) => {
+  }, parameters) {
+    .loftBUsingGET(parameters).then((response) => {
       commit('setLoftbBean', {
         'data': response.data
       })
@@ -251,8 +251,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .mapUsingGET().then((response) => {
+  }, parameters) {
+    .mapUsingGET(parameters).then((response) => {
       commit('setMapBean', {
         'data': response.data
       })
@@ -265,8 +265,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .matchesUsingGET().then((response) => {
+  }, parameters) {
+    .matchesUsingGET(parameters).then((response) => {
       commit('setMatchesBean', {
         'data': response.data
       })
@@ -279,8 +279,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .otherFundUsingGET().then((response) => {
+  }, parameters) {
+    .otherFundUsingGET(parameters).then((response) => {
       commit('setOtherBean', {
         'data': response.data
       })
@@ -293,8 +293,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .publicMatchUsingGET().then((response) => {
+  }, parameters) {
+    .publicMatchUsingGET(parameters).then((response) => {
       commit('setPublicmatchBean', {
         'data': response.data
       })
@@ -307,8 +307,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .queryUsingGET().then((response) => {
+  }, parameters) {
+    .queryUsingGET(parameters).then((response) => {
       commit('setQueryBean', {
         'data': response.data
       })
@@ -321,8 +321,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .saveUsingPOST().then((response) => {
+  }, parameters) {
+    .saveUsingPOST(parameters).then((response) => {
       commit('setSaveBean', {
         'data': response.data
       })
@@ -335,8 +335,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .stockDetailUsingGET().then((response) => {
+  }, parameters) {
+    .stockDetailUsingGET(parameters).then((response) => {
       commit('setStockdetailBean', {
         'data': response.data
       })
@@ -349,8 +349,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .stockFundUsingGET().then((response) => {
+  }, parameters) {
+    .stockFundUsingGET(parameters).then((response) => {
       commit('setStockfundBean', {
         'data': response.data
       })
@@ -363,8 +363,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .stockFxUsingGET().then((response) => {
+  }, parameters) {
+    .stockFxUsingGET(parameters).then((response) => {
       commit('setStockfxBean', {
         'data': response.data
       })
@@ -377,8 +377,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .stockJhUsingGET().then((response) => {
+  }, parameters) {
+    .stockJhUsingGET(parameters).then((response) => {
       commit('setStockjhBean', {
         'data': response.data
       })
@@ -391,8 +391,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .stockVolHalfUsingGET().then((response) => {
+  }, parameters) {
+    .stockVolHalfUsingGET(parameters).then((response) => {
       commit('setStockvolhalfBean', {
         'data': response.data
       })
@@ -405,8 +405,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .teamUsingGET().then((response) => {
+  }, parameters) {
+    .teamUsingGET(parameters).then((response) => {
       commit('setTeamBean', {
         'data': response.data
       })
@@ -419,8 +419,8 @@ const actions = {
     dispatch,
     commit,
     state
-  }, request) {
-    .topLiveUsingGET().then((response) => {
+  }, parameters) {
+    .topLiveUsingGET(parameters).then((response) => {
       commit('setTopliveBean', {
         'data': response.data
       })

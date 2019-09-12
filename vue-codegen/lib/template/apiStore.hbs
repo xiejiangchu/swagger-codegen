@@ -1,5 +1,5 @@
 /* eslint-disable */ 
-import * as {{moduleName}} from './api'
+import * as {{moduleName}} from './{{moduleName}}Request'
 
 //相关内容可参考 https://segmentfault.com/a/1190000015782272
 
@@ -16,7 +16,7 @@ const state = {
 */
 const getters = {
 {{#methods}}
-   get{{upperCaseFirst methodName}}Req(state, getters, rootState) => {
+    get{{upperCaseFirst methodName}}Req:(state, getters, rootState) => {
     return state.{{methodName}}Req
   },
 {{/methods}}
@@ -33,8 +33,8 @@ const actions = {
 	/**
 	* {{summary}}
 	*/
-    request{{upperCaseFirst methodName}}({ dispatch, commit, state }, parameters){
-    {{moduleName}}.{{methodName}}(parameters).then((response) => {
+    request{{upperCaseFirst methodName}}({commit, state }, parameters){
+      shop.{{methodName}}(parameters).then((response) => {
       commit('set{{upperCaseFirst methodName}}Req', { 'data': response.data })
 	})
    },
