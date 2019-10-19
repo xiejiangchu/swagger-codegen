@@ -17,12 +17,12 @@ public class {{camelCase tableInfo.tableName}}ServiceImpl implements {{camelCase
     private {{camelCase tableInfo.tableName}}Mapper {{camelCaseLowerFirst tableInfo.tableName}}Mapper;
 
 	@Override
-	public {{camelCase tableInfo.tableName}} selectByPrimaryKey(Integer id){
+	public {{camelCase tableInfo.tableName}} selectById(Integer id){
 		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.selectByPrimaryKey(id);
 	}
 
 	@Override
-	public List<{{camelCase tableInfo.tableName}}> selectByPrimaryKeys(List<Integer> ids){
+	public List<{{camelCase tableInfo.tableName}}> selectByIds(List<Integer> ids){
 		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.selectByPrimaryKeys(ids);
 	}
 
@@ -37,29 +37,33 @@ public class {{camelCase tableInfo.tableName}}ServiceImpl implements {{camelCase
 		return record;
 	}
 
-	@Override	
-	public {{camelCase tableInfo.tableName}} insertSelective({{camelCase tableInfo.tableName}} record){
-		{{camelCaseLowerFirst tableInfo.tableName}}Mapper.insertSelective(record);
+	@Override
+	public insert({{functionParam cols}}){
+		{{camelCase tableInfo.tableName}} {{camelCaseLowerFirst tableInfo.tableName}} = new {{camelCase tableInfo.tableName}}();
+		{{#cols}}
+		{{camelCaseLowerFirst ../tableInfo.tableName}}.set{{camelCase columnName}}({{camelCaseLowerFirst columnName}});
+		{{/cols}}
+		{{camelCaseLowerFirst tableInfo.tableName}}Mapper.insertSelective({{camelCaseLowerFirst tableInfo.tableName}});
 		return record;
 	}
 
 	@Override
 	public int update({{camelCase tableInfo.tableName}} record){
-		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.update(record);
+		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.updateById(record);
 	}
 
 	@Override
-	public int updateByPrimaryKeySelective({{camelCase tableInfo.tableName}} record){
-		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.updateByPrimaryKeySelective(record);
+	public update({{functionParam cols}}){
+		{{camelCase tableInfo.tableName}} {{camelCaseLowerFirst tableInfo.tableName}} = new {{camelCase tableInfo.tableName}}();
+		{{#cols}}
+		{{camelCaseLowerFirst ../tableInfo.tableName}}.set{{camelCase columnName}}({{camelCaseLowerFirst columnName}});
+		{{/cols}}
+		{{camelCaseLowerFirst tableInfo.tableName}}Mapper.updateById({{camelCaseLowerFirst tableInfo.tableName}});
+		return record;
 	}
 
 	@Override
-	public int updateByPrimaryKey({{camelCase tableInfo.tableName}} record){
-		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.updateByPrimaryKey(record);
-	}
-
-	@Override
-	public int deleteByPrimaryKey(Integer id){
+	public int deleteById(Integer id){
 		return {{camelCaseLowerFirst tableInfo.tableName}}Mapper.deleteByPrimaryKey(id);
 	}
 

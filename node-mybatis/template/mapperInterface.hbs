@@ -7,14 +7,12 @@ import {{package}}.bean.{{camelCase tableInfo.tableName}};
  * Created by xie
  */
 public interface {{camelCase tableInfo.tableName}}Mapper {
-	{{camelCase tableInfo.tableName}} selectByPrimaryKey(Integer id);
-	List<{{camelCase tableInfo.tableName}}> selectByPrimaryKeys(List<Integer> ids);
+	{{camelCase tableInfo.tableName}} selectById(Integer id);
+	List<{{camelCase tableInfo.tableName}}> selectByIds(List<Integer> ids);
 	int count();
 	int insert({{camelCase tableInfo.tableName}} record);
 	int insertSelective({{camelCase tableInfo.tableName}} record);
-	int update({{camelCase tableInfo.tableName}} record);
-	int updateByPrimaryKeySelective({{camelCase tableInfo.tableName}} record);
-	int updateByPrimaryKey({{camelCase tableInfo.tableName}} record);
-	int deleteByPrimaryKey(Integer id);
+	int updateById({{camelCase tableInfo.tableName}} record);
+	int deleteById(Integer id);
 	int deleteAll();
 }

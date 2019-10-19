@@ -34,7 +34,7 @@ const actions = {
 	* {{summary}}
 	*/
     request{{upperCaseFirst methodName}}({commit, state }, parameters){
-      shop.{{methodName}}(parameters).then((response) => {
+      {{../moduleName}}.{{methodName}}(parameters).then((response) => {
       commit('set{{upperCaseFirst methodName}}Req', { 'data': response.data })
 	})
    },

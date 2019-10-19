@@ -145,6 +145,33 @@ Handlebars.registerHelper('javaTypeLong', function(str) {
     return typeMapping[str]['long'];
 })
 
+
+Handlebars.registerHelper('functionCall', function(list) {
+    return _.flatMap(list, flatCall);
+})
+
+Handlebars.registerHelper('functionParam', function(list) {
+    return _.flatMap(list, flat);
+})
+
+Handlebars.registerHelper('controllerParam', function(list) {
+    return _.flatMap(list, flatController);
+})
+
+function flatCall(val) {
+    return val.columnName;
+}
+
+function flat(val) {
+    let type = _.toUpper(val.dataType);
+    return typeMapping[type]['short'] + " " + val.columnName;
+}
+
+function flatController(val) {
+    let type = _.toUpper(val.dataType);
+    return `@RequestParam(value = "${ val.columnName}") ${typeMapping[type]['short']}  ${val.columnName}`;
+}
+
 function camelCase(str) {
     str = str.toLowerCase();
     str = _.capitalize(str)
@@ -171,17 +198,17 @@ Handlebars.registerHelper('bracketsAndCamelCaseLowerFirst', function(str) {
     return `{${str}}`
 })
 
-var java_package = 'com.xie.server'
-var tables = [];
+var java_package = 'com.ebscn.server.auth';
+var prefix = "T_";
 
 
 
 //实现本地链接
 var connection = mysql.createConnection({
-    host: '127.0.0.1',
+    host: '10.84.147.137',
     user: 'root',
-    password: 'mysql',
-    database: 'nideshop'
+    password: '1234rewq',
+    database: 'authbank'
 })
 
 connection.query(` select  
@@ -190,17 +217,23 @@ connection.query(` select
             table_comment as comments,
             create_time   as createTime from information_schema.tables where table_schema = (select database())`, function(error, results, fields) {
     if (error) throw error;
-    tables = results;
-   if (!!fs.existsSync(java_package)) {} else {
-        if (!fs.mkdirSync(java_package),{ recursive: true }) {
-            return console.log("目录：" + java_package + "创建成功");
+    if (!!fs.existsSync(java_package)) {
+        console.log("目录：" + java_package + "已经存在");
+    } else {
+        if (!fs.mkdirSync(java_package), { recursive: true }) {
+            console.log("目录：" + java_package + "创建成功");
         } else {
-            return console.log("目录：" + java_package + "创建失败");
+            console.log("目录：" + java_package + "创建失败");
         }
     }
     // console.log(results);
+
     for (var k = 0, length3 = results.length; k < length3; k++) {
-        getColum(results[k]);
+        if (results[k].tableName != "migration_history" && results[k].tableName != "MIGRATION_HISTORY") {
+            results[k].tableName = _.trimStart(results[k].tableName, prefix);
+            getColum(results[k]);
+        }
+
     }
 });
 
@@ -216,17 +249,17 @@ function getColum(table) {
             character_octet_length as characterOctetLength,
             extra
         from information_schema.columns
-        where table_name = '${table.tableName}' and table_schema = (select database()) order by ordinal_position`, function(error, results, fields) {
+        where table_name = '${prefix}${table.tableName}' and table_schema = (select database()) order by ordinal_position`, function(error, results, fields) {
         if (error) throw error;
         // console.log(results);
         let params = {
             'tableInfo': table,
             'package': java_package,
             'cols': results,
-            'project_base':java_package
+            'project_base': java_package
         };
-       
-     
+
+
         genBean(params);
         genMapper(params);
         genMapperInterface(params);

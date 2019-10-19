@@ -12,17 +12,17 @@
          </trim>
     </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM {{tableInfo.tableName}}
+        FROM {{toUpperCase tableInfo.tableName}}
         WHERE id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
+    <select id="selectByIds" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM {{tableInfo.tableName}}
+        FROM {{toUpperCase tableInfo.tableName}}
         WHERE id IN
         <foreach collection="list" separator="," item="id" open="(" close=")">
             #{id,jdbcType=INTEGER}
@@ -31,14 +31,14 @@
 
     <select id="count" resultType="integer">
         SELECT COUNT(1)
-        FROM {{tableInfo.tableName}}
+        FROM {{toUpperCase tableInfo.tableName}}
     </select>
 
     <insert id="insert" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
     	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
         </selectKey>
-		INSERT INTO {{tableInfo.tableName}}
+		INSERT INTO {{toUpperCase tableInfo.tableName}}
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 		{{#cols}}
         `{{columnName}}`,
@@ -57,7 +57,7 @@
     	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
         </selectKey>
-		INSERT INTO {{tableInfo.tableName}}
+		INSERT INTO {{toUpperCase tableInfo.tableName}}
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 		{{#cols}}
 		<if test="{{camelCaseLowerFirst columnName}} != null">
@@ -68,7 +68,7 @@
         VALUES(
         <trim prefix="" suffix="" suffixOverrides=",">
 		{{#cols}}
-		<if test="{{camelCaseLowerFirst columnName}} != null">
+		<if test="{{camelCaseLowerFirst columnName}} != null and {{camelCaseLowerFirst columnName}} != ''">
         #{{bracketsAndCamelCaseLowerFirst columnName}},
          </if>
 		{{/cols}}
@@ -76,42 +76,11 @@
         )
 	</insert>
 
-	<update id="update" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
-		UPDATE {{tableInfo.tableName}} SET(
-        <trim prefix="" suffix="" suffixOverrides=",">
-		{{#cols}}
-        `{{columnName}}`,
-		{{/cols}}
-        </trim>
-	    )
-		VALUES(
-        <trim prefix="" suffix="" suffixOverrides=",">
-		{{#cols}}
-        #{{bracketsAndCamelCaseLowerFirst columnName}},
-		{{/cols}}
-        </trim>
-		)
-	</update>
-
-	<update id="updateByPrimaryKeySelective" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
-        UPDATE {{tableInfo.tableName}}
-        <set>
-        	<trim prefix="" suffix="" suffixOverrides=",">
-        		{{#cols}}
-	            <if test="{{camelCaseLowerFirst columnName}} != null">
-		        `{{columnName}}` = #{{bracketsAndCamelCaseLowerFirst columnName}},
-		        </if>
-		        {{/cols}}
-            </trim>
-        </set>
-        WHERE id = #{id,jdbcType=INTEGER}
-    </update>
-
-	 <update id="updateByPrimaryKey" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
-     UPDATE {{tableInfo.tableName}} SET
+	 <update id="updateById" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+     UPDATE {{toUpperCase tableInfo.tableName}} SET
      <trim prefix="" suffix="" suffixOverrides=",">
      {{#cols}}
-	 <if test="{{camelCaseLowerFirst columnName}} != null">
+	 <if test="{{camelCaseLowerFirst columnName}} != null and {{camelCaseLowerFirst columnName}} != ''">
        `{{columnName}}`=#{{bracketsAndCamelCaseLowerFirst columnName}},
      </if>
 	{{/cols}}
@@ -119,12 +88,12 @@
     WHERE id = #{id,jdbcType=INTEGER}
   </update>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    DELETE FROM {{tableInfo.tableName}}
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    DELETE FROM {{toUpperCase tableInfo.tableName}}
     WHERE id = #{id,jdbcType=INTEGER}
   </delete>
 
   <delete id="deleteAll">
-    DELETE FROM {{tableInfo.tableName}}
+    DELETE FROM {{toUpperCase tableInfo.tableName}}
   </delete>
 </mapper>

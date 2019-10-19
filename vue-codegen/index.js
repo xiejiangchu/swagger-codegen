@@ -8,8 +8,8 @@ const _ = require('lodash')
 // const ymlGen = require('./yml/index.js')
 
 
-var url = 'http://127.0.0.1:8080/v2/api-docs';
-var name = 'shop';
+var url = 'http://10.84.140.252:8084/v2/api-docs';
+var name = 'admin';
 
 request(url, function(error, response, body) {
     if (!error && response.statusCode == 200) {
