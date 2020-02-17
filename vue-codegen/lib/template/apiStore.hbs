@@ -33,11 +33,16 @@ const actions = {
 	/**
 	* {{summary}}
 	*/
-    request{{upperCaseFirst methodName}}({commit, state }, parameters){
-      {{../moduleName}}.{{methodName}}(parameters).then((response) => {
-      commit('set{{upperCaseFirst methodName}}Req', { 'data': response.data })
-	})
-   },
+  async request{{upperCaseFirst methodName}}({commit, state }, parameters){
+      return new Promise((resolve, reject) => {
+        {{../moduleName}}.{{methodName}}(parameters).then((response) => {
+          commit('set{{upperCaseFirst methodName}}Req', { 'data': response.data })
+          resolve(response);
+         }).catch((err) => {
+        reject(err)
+      })
+	 })
+ },
 {{/methods}}
 }
 

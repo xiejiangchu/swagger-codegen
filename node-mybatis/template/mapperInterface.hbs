@@ -8,11 +8,16 @@ import {{package}}.bean.{{camelCase tableInfo.tableName}};
  */
 public interface {{camelCase tableInfo.tableName}}Mapper {
 	{{camelCase tableInfo.tableName}} selectById(Integer id);
+
 	List<{{camelCase tableInfo.tableName}}> selectByIds(List<Integer> ids);
+
 	int count();
+
 	int insert({{camelCase tableInfo.tableName}} record);
-	int insertSelective({{camelCase tableInfo.tableName}} record);
+
 	int updateById({{camelCase tableInfo.tableName}} record);
+
 	int deleteById(Integer id);
+	
 	int deleteAll();
 }

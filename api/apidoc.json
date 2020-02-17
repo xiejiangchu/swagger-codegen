@@ -1,0 +1,19 @@
+{
+  "name": "apidoc文档",
+  "version": "1.0.0",
+  "description": "测试生成apidoc文档",
+  "title": "自定义文档",
+  "url" : "https://api.github.com/v1",
+  "header": {
+    "title": "My own header title",
+    "filename": "header.md"
+  },
+  "footer": {
+    "title": "My own footer title",
+    "filename": "footer.md"
+  },
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": true
+  }
+}

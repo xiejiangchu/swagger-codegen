@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="{{package}}.mapper.{{camelCase tableInfo.tableName}}Mapper">
     <resultMap id="BaseResultMap" type="{{package}}.bean.{{camelCase tableInfo.tableName}}">
-        {{#cols}}
+    {{#cols}}
         <result property="{{camelCaseLowerFirst columnName}}" column="{{columnName}}"/>
 		{{/cols}}
     </resultMap>
@@ -12,17 +12,17 @@
          </trim>
     </sql>
 
-    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM {{toUpperCase tableInfo.tableName}}
+        FROM {{toUpperCaseDB tableInfo.tableName}}
         WHERE id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="selectByIds" resultMap="BaseResultMap">
+    <select id="getByIds" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM {{toUpperCase tableInfo.tableName}}
+        FROM {{toUpperCaseDB tableInfo.tableName}}
         WHERE id IN
         <foreach collection="list" separator="," item="id" open="(" close=")">
             #{id,jdbcType=INTEGER}
@@ -31,36 +31,17 @@
 
     <select id="count" resultType="integer">
         SELECT COUNT(1)
-        FROM {{toUpperCase tableInfo.tableName}}
+        FROM {{toUpperCaseDB tableInfo.tableName}}
     </select>
 
-    <insert id="insert" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
+	<insert id="insert" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
     	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
-        </selectKey>
-		INSERT INTO {{toUpperCase tableInfo.tableName}}
+      </selectKey>
+		INSERT INTO {{toUpperCaseDB tableInfo.tableName}}
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 		{{#cols}}
-        `{{columnName}}`,
-		{{/cols}}
-		</trim>
-		VALUES(
-        <trim prefix="" suffix="" suffixOverrides=",">
-		{{#cols}}
-        #{{bracketsAndCamelCaseLowerFirst columnName}},
-		{{/cols}}
-        </trim>
-        )
-	</insert>
-
-	<insert id="insertSelective" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
-    	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID() AS id
-        </selectKey>
-		INSERT INTO {{toUpperCase tableInfo.tableName}}
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-		{{#cols}}
-		<if test="{{camelCaseLowerFirst columnName}} != null">
+		<if test="{{camelCaseLowerFirst columnName}} != null and {{camelCaseLowerFirst columnName}} != ''">
         `{{columnName}}`,
          </if>
 		{{/cols}}
@@ -77,7 +58,7 @@
 	</insert>
 
 	 <update id="updateById" parameterType="{{package}}.bean.{{camelCase tableInfo.tableName}}">
-     UPDATE {{toUpperCase tableInfo.tableName}} SET
+     UPDATE {{toUpperCaseDB tableInfo.tableName}} SET
      <trim prefix="" suffix="" suffixOverrides=",">
      {{#cols}}
 	 <if test="{{camelCaseLowerFirst columnName}} != null and {{camelCaseLowerFirst columnName}} != ''">
@@ -89,11 +70,11 @@
   </update>
 
   <delete id="deleteById" parameterType="java.lang.Integer">
-    DELETE FROM {{toUpperCase tableInfo.tableName}}
+    DELETE FROM {{toUpperCaseDB tableInfo.tableName}}
     WHERE id = #{id,jdbcType=INTEGER}
   </delete>
 
   <delete id="deleteAll">
-    DELETE FROM {{toUpperCase tableInfo.tableName}}
+    DELETE FROM {{toUpperCaseDB tableInfo.tableName}}
   </delete>
 </mapper>

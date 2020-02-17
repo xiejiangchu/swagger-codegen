@@ -115,6 +115,10 @@ var typeMapping = {
     "BLOB": {
         "short": "String",
         "long": "java.lang.String"
+    },
+    "JSON": {
+        "short": "String",
+        "long": "java.lang.String"
     }
 }
 
@@ -123,6 +127,10 @@ Handlebars.registerHelper('toLowerCase', function(str) {
 })
 Handlebars.registerHelper('toUpperCase', function(str) {
     return _.toUpper(str);
+})
+
+Handlebars.registerHelper('toUpperCaseDB', function(str) {
+    return prefix + _.toUpper(str);
 })
 Handlebars.registerHelper('upperCaseFirst', function(str) {
     return _.upperFirst(str);
@@ -198,24 +206,28 @@ Handlebars.registerHelper('bracketsAndCamelCaseLowerFirst', function(str) {
     return `{${str}}`
 })
 
-var java_package = 'com.ebscn.server.auth';
+var java_package = 'com.xie.exam.server';
 var prefix = "T_";
 
 
 
 //实现本地链接
 var connection = mysql.createConnection({
-    host: '10.84.147.137',
+    host: '10.84.147.133',
     user: 'root',
-    password: '1234rewq',
+    password: '1qazxsw2',
     database: 'authbank'
 })
 
-connection.query(` select  
-            table_name    as tableName,
-            engine        as engine,
-            table_comment as comments,
-            create_time   as createTime from information_schema.tables where table_schema = (select database())`, function(error, results, fields) {
+connection.query(`SELECT
+                    table_name AS tableName,
+                    ENGINE AS ENGINE,
+                    table_comment AS comments,
+                    create_time AS createTime 
+                FROM
+                    information_schema.TABLES 
+                WHERE
+                    table_schema = ( SELECT DATABASE ( ) )`, function(error, results, fields) {
     if (error) throw error;
     if (!!fs.existsSync(java_package)) {
         console.log("目录：" + java_package + "已经存在");
@@ -235,21 +247,33 @@ connection.query(` select
         }
 
     }
+
+    connection.end();
 });
 
 function getColum(table) {
-    connection.query(`select
-            table_name             as tableName,
-            column_name            as columnName,
-            data_type              as dataType,
-            column_comment         as comments,
-            column_key             as columnKey,
-            is_nullable            as isNullable,
-            column_type            as columnType,
-            character_octet_length as characterOctetLength,
-            extra
-        from information_schema.columns
-        where table_name = '${prefix}${table.tableName}' and table_schema = (select database()) order by ordinal_position`, function(error, results, fields) {
+    connection.query(`SELECT
+                        table_name AS tableName,
+                        column_name AS columnName,
+                        data_type AS dataType,
+                        column_comment AS comments,
+                        column_key AS columnKey,
+                        is_nullable AS isNullable,
+                        character_maximum_length AS character_maximum_length,
+                        numeric_precision AS numeric_precision,
+                        numeric_scale AS numeric_scale,
+                        column_type AS columnType,
+                        character_octet_length AS characterOctetLength,
+                        extra AS extra 
+                    FROM
+                        information_schema.COLUMNS 
+                    WHERE
+                        table_name = '${prefix}${table.tableName}' 
+                        AND table_schema = ( SELECT DATABASE ( ) ) 
+                        AND data_type != 'timestamp'
+                        AND extra != 'auto_increment'
+                    ORDER BY
+                        ordinal_position`, function(error, results, fields) {
         if (error) throw error;
         // console.log(results);
         let params = {
@@ -271,92 +295,84 @@ function getColum(table) {
 
 function genBean(data) {
     let munstr = path.join(__dirname, `${data.project_base}/bean/`);
-    if (!!fs.existsSync(munstr)) {} else {
+    if (!fs.existsSync(munstr)) {
         if (!fs.mkdirSync(munstr)) {
-            return console.log("目录：" + munstr + "创建成功");
+            console.log("目录：" + munstr + "创建成功");
         } else {
-            return console.log("目录：" + munstr + "创建失败");
+            console.log("目录：" + munstr + "创建失败");
         }
     }
     let fileName = camelCase(data.tableInfo.tableName);
     let template = Handlebars.compile(beanTemplate)(data);
     fs.writeFileSync(path.join(__dirname, `${data.project_base}/bean/${fileName}.java`), template);
-    // console.log(template);
 }
 
 function genMapper(data) {
     let munstr = path.join(__dirname, `${data.project_base}/xml/`);
-    if (!!fs.existsSync(munstr)) {} else {
+    if (!fs.existsSync(munstr)) {
         if (!fs.mkdirSync(munstr)) {
-            return console.log("目录：" + munstr + "创建成功");
+            console.log("目录：" + munstr + "创建成功");
         } else {
-            return console.log("目录：" + munstr + "创建失败");
+            console.log("目录：" + munstr + "创建失败");
         }
     }
     let fileName = camelCase(data.tableInfo.tableName);
     let template = Handlebars.compile(mapperTemplate)(data);
     fs.writeFileSync(path.join(__dirname, `${data.project_base}/xml/${fileName}Mapper.xml`), template);
-    // console.log(template);
 }
 
 function genMapperInterface(data) {
     let munstr = path.join(__dirname, `${data.project_base}/mapper/`);
-    if (!!fs.existsSync(munstr)) {} else {
+    if (!fs.existsSync(munstr)) {
         if (!fs.mkdirSync(munstr)) {
-            return console.log("目录：" + munstr + "创建成功");
+            console.log("目录：" + munstr + "创建成功");
         } else {
-            return console.log("目录：" + munstr + "创建失败");
+            console.log("目录：" + munstr + "创建失败");
         }
     }
     let fileName = camelCase(data.tableInfo.tableName);
     let template = Handlebars.compile(mapperInterfaceTemplate)(data);
     fs.writeFileSync(path.join(__dirname, `${data.project_base}/mapper/${fileName}Mapper.java`), template);
-    // console.log(template);
 }
 
 function genService(data) {
     let munstr = path.join(__dirname, `${data.project_base}/service/`);
-    if (!!fs.existsSync(munstr)) {} else {
+    if (!fs.existsSync(munstr)) {
         if (!fs.mkdirSync(munstr)) {
-            return console.log("目录：" + munstr + "创建成功");
+            console.log("目录：" + munstr + "创建成功");
         } else {
-            return console.log("目录：" + munstr + "创建失败");
+            console.log("目录：" + munstr + "创建失败");
         }
     }
     let fileName = camelCase(data.tableInfo.tableName);
     let template = Handlebars.compile(serviceTemplate)(data);
     fs.writeFileSync(path.join(__dirname, `${data.project_base}/service/${fileName}Service.java`), template);
-    // console.log(template);
 }
 
 function genServiceImpl(data) {
     let munstr = path.join(__dirname, `${data.project_base}/service/impl`);
-    if (!!fs.existsSync(munstr)) {} else {
+    if (!fs.existsSync(munstr)) {
         if (!fs.mkdirSync(munstr)) {
-            return console.log("目录：" + munstr + "创建成功");
+            console.log("目录：" + munstr + "创建成功");
         } else {
-            return console.log("目录：" + munstr + "创建失败");
+            console.log("目录：" + munstr + "创建失败");
         }
     }
     let fileName = camelCase(data.tableInfo.tableName);
     let template = Handlebars.compile(serviceImplTemplate)(data);
     fs.writeFileSync(path.join(__dirname, `${data.project_base}/service/impl/${fileName}ServiceImpl.java`), template);
-    // console.log(template);
 }
 
 function genController(data) {
     let munstr = path.join(__dirname, `${data.project_base}/controller/`);
-    if (!!fs.existsSync(munstr)) {} else {
+    if (!fs.existsSync(munstr)) {
         if (!fs.mkdirSync(munstr)) {
-            return console.log("目录：" + munstr + "创建成功");
+            console.log("目录：" + munstr + "创建成功");
         } else {
-            return console.log("目录：" + munstr + "创建失败");
+            console.log("目录：" + munstr + "创建失败");
         }
     }
     let fileName = camelCase(data.tableInfo.tableName);
     let template = Handlebars.compile(controllerTemplate)(data);
     fs.writeFileSync(path.join(__dirname, `${data.project_base}/controller/${fileName}Controller.java`), template);
-    // console.log(template);
 }
-
-// connection.end();
