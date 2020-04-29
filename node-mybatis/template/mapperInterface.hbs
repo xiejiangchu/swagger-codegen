@@ -7,9 +7,9 @@ import {{package}}.bean.{{camelCase tableInfo.tableName}};
  * Created by xie
  */
 public interface {{camelCase tableInfo.tableName}}Mapper {
-	{{camelCase tableInfo.tableName}} selectById(Integer id);
+	{{camelCase tableInfo.tableName}} getById(Integer id);
 
-	List<{{camelCase tableInfo.tableName}}> selectByIds(List<Integer> ids);
+	List<{{camelCase tableInfo.tableName}}> getByIds(List<Integer> ids);
 
 	int count();
 

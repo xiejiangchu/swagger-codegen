@@ -84,6 +84,14 @@ var typeMapping = {
         "short": "double",
         "long": "java.lang.Double"
     },
+    "DECIMAL": {
+        "short": "double",
+        "long": "java.lang.Double"
+    },
+    "DATETIME": {
+        "short": "String",
+        "long": "java.lang.String"
+    },
     "BINARY": {
         "short": "String",
         "long": "java.lang.String"
@@ -206,7 +214,7 @@ Handlebars.registerHelper('bracketsAndCamelCaseLowerFirst', function(str) {
     return `{${str}}`
 })
 
-var java_package = 'com.xie.exam.server';
+var java_package = 'com.xie.crawl';
 var prefix = "T_";
 
 
@@ -216,7 +224,7 @@ var connection = mysql.createConnection({
     host: '10.84.147.133',
     user: 'root',
     password: '1qazxsw2',
-    database: 'authbank'
+    database: 'price'
 })
 
 connection.query(`SELECT

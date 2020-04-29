@@ -64,7 +64,7 @@ public class {{camelCase tableInfo.tableName}}Controller {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ApiOperation(value = "更新{{tableInfo.comments}}记录", nickname = "{{camelCaseLowerFirst tableInfo.tableName}}Update2",response = Integer.class)
-	BaseResponse<{{camelCase tableInfo.tableName}}> update24{{camelCase tableInfo.tableName}}({{{controllerParam cols}}}){
+	BaseResponse update24{{camelCase tableInfo.tableName}}({{{controllerParam cols}}}){
 		return BaseResponse.ok({{camelCaseLowerFirst tableInfo.tableName}}Service.update({{{functionCall cols}}}));
 	}
 
