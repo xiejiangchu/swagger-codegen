@@ -3,6 +3,7 @@ const codegen = require('./lib/codegen.js')
 const fs = require('fs')
 const path = require('path')
 const request = require('request');
+const HashMap = require('./lib/HashMap.js');
 const _ = require('lodash')
 // const mdGen = require('./md/index.js')
 // const ymlGen = require('./yml/index.js')
@@ -17,29 +18,48 @@ request(url, function(error, response, body) {
         let opt = {
             swagger: JSON.parse(body),
             moduleName: name,
-            className: name
+            className: name,
+            domain:"http://127.0.0.1:8080/"
         }
         let data = parse(opt);
-        // console.log(JSON.stringify(data));
-        genJs(data);
-        // genMd(data);
-        // genYml(data);
+        let methods = data.methods;
+        let map = new HashMap();
+        for (var i = methods.length - 1; i >= 0; i--) {
+            if (map.get(methods[i].tags)) {
+                map.get(methods[i].tags).push(methods[i]);
+            } else {
+                map.put(methods[i].tags, []);
+            }
+
+        }
+        let keys = map.keySet();
+        for (var i = keys.length - 1; i >= 0; i--) {
+            let name=keys[i];
+            let methods=map.get(name);
+            data.moduleName=name;
+            data.methods=methods;
+            genJs(name,data);
+            // genMd(data);
+            // genYml(data);
+        }
+
     }
 });
 
-function genJs(data) {
+function genJs(name, data) {
     let codeResult = codegen(data);
-    fs.writeFileSync(path.join(__dirname, `/${name}Request.js`), codeResult.api);
-    fs.writeFileSync(path.join(__dirname, `/${name}.js`), codeResult.store);
+    fs.writeFileSync(path.join(__dirname, `/output/${name}Request.js`), codeResult.api);
+    fs.writeFileSync(path.join(__dirname, `/output/${name}.js`), codeResult.store);
+    fs.writeFileSync(path.join(__dirname, `/output/request.js`), codeResult.request);
 }
 
 
-function genMd(data) {
+function genMd(name, ddata) {
     let mdData = mdGen(data)
-    fs.writeFileSync(path.join(__dirname, `./${name}.md`), mdData)
+    fs.writeFileSync(path.join(__dirname, `./output/${name}.md`), mdData)
 }
 
-function genYml(data) {
+function genYml(name, ddata) {
     let ymlData = ymlGen(data)
-    fs.writeFileSync(path.join(__dirname, `./${name}.yml`), ymlData)
+    fs.writeFileSync(path.join(__dirname, `./output/${name}.yml`), ymlData)
 }
