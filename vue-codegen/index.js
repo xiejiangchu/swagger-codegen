@@ -28,7 +28,7 @@ request(url, function(error, response, body) {
             if (map.get(methods[i].tags)) {
                 map.get(methods[i].tags).push(methods[i]);
             } else {
-                map.put(methods[i].tags, []);
+                map.put(methods[i].tags, [methods[i]]);
             }
 
         }
